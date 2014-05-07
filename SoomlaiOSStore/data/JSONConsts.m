@@ -38,6 +38,10 @@ NSString *const JSON_MARKETITEM_PRODUCT_ID    = @"productId";
 NSString *const JSON_MARKETITEM_IOS_ID        = @"iosId";
 NSString *const JSON_MARKETITEM_CONSUMABLE    = @"consumable";
 NSString *const JSON_MARKETITEM_PRICE         = @"price";
+NSString *const JSON_MARKETITEM_MARKET_PRICE  = @"market_price";
+NSString *const JSON_MARKETITEM_MARKET_TITLE  = @"market_title";
+NSString *const JSON_MARKETITEM_MARKET_DESC   = @"market_desc";
+NSString *const JSON_MARKETITEM_MARKET_PRICE_WITH_CURRENCY_SYMBOL   = @"market_price_with_currency_symbol";
 
 NSString *const JSON_EQUIPPABLE_EQUIPPING     = @"equipping";
 

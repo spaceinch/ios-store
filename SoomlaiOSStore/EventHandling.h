@@ -66,6 +66,7 @@
 #define DICT_ELEMENT_DESCRIPTION       @"description"
 #define DICT_ELEMENT_LOCALE            @"locale"
 #define DICT_ELEMENT_MARKET_ITEMS      @"marketItems"
+#define DICT_ELEMENT_TRANSACTION_ID    @"transactionId"
 
 // Error Codes
 #define ERR_GENERAL                 0
@@ -94,7 +95,7 @@
 + (void)postItemPurchaseStarted:(PurchasableVirtualItem*)item;
 + (void)postItemPurchased:(PurchasableVirtualItem*)item;
 + (void)postMarketPurchaseCancelled:(PurchasableVirtualItem*)purchasableVirtualItem;
-+ (void)postMarketPurchase:(PurchasableVirtualItem*)purchasableVirtualItem andReceiptUrl:(NSURL*)receiptUrl;
++ (void)postMarketPurchase:(PurchasableVirtualItem*)purchasableVirtualItem andReceiptUrl:(NSURL*)receiptUrl andTransactionId:(NSString *)transactionId;
 + (void)postMarketPurchaseVerification:(BOOL)verified forItem:(PurchasableVirtualItem*)purchasableVirtualItem andTransaction:(SKPaymentTransaction*)transaction forObject:(id)object;
 + (void)postMarketPurchaseStarted:(PurchasableVirtualItem*)purchasableVirtualItem;
 + (void)postMarketItemsRefreshed:(NSArray*)marketItems;

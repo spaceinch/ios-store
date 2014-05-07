@@ -183,7 +183,7 @@ static NSString* TAG = @"SOOMLA StoreController";
         receiptUrl = [[NSBundle mainBundle] appStoreReceiptURL];
     }
     
-    [EventHandling postMarketPurchase:pvi andReceiptUrl:receiptUrl];
+    [EventHandling postMarketPurchase:pvi andReceiptUrl:receiptUrl andTransactionId:transaction.transactionIdentifier];
     [pvi giveAmount:1];
     [EventHandling postItemPurchased:pvi];
     

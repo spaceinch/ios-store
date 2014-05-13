@@ -41,6 +41,9 @@
 
 @property BOOL initialized;
 
+@property (nonatomic, retain) NSString *customReceiptVerificationClassName;
+
+
 + (StoreController*)getInstance;
 
 /**

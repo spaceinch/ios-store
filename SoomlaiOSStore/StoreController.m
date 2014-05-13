@@ -36,6 +36,7 @@
 #import "PurchaseWithMarket.h"
 
 #import "SoomlaVerification.h"
+#import "SoomlaCustomReceiptVerification.h"
 
 @implementation StoreController
 
@@ -74,6 +75,8 @@ static NSString* TAG = @"SOOMLA StoreController";
     }
     
     LogDebug(TAG, @"StoreController Initializing ...");
+    
+    self.customReceiptVerificationClassName = nil;
     
     [ObscuredNSUserDefaults setInt:[storeAssets getVersion] forKey:@"SA_VER_NEW"];
     
@@ -223,13 +226,24 @@ static NSString* TAG = @"SOOMLA StoreController";
     @try {
         PurchasableVirtualItem* pvi = [[StoreInfo getInstance] purchasableItemWithProductId:transaction.payment.productIdentifier];
         
-        if (VERIFY_PURCHASES) {
-            sv = [[SoomlaVerification alloc] initWithTransaction:transaction andPurchasable:pvi];
-            
-            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(purchaseVerified:) name:EVENT_MARKET_PURCHASE_VERIF object:sv];
-            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unexpectedVerificationError:) name:EVENT_UNEXPECTED_ERROR_IN_STORE object:sv];
-            
-            [sv verifyData];
+        if (VERIFY_PURCHASES || (self.customReceiptVerificationClassName != nil)) {
+            if (self.customReceiptVerificationClassName != nil) {
+                SoomlaCustomReceiptVerification *verifier = [(SoomlaCustomReceiptVerification *)[NSClassFromString(self.customReceiptVerificationClassName) alloc]
+                                                             initWithTransaction:transaction andPurchasable:pvi];
+                if (verifier) {
+                    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(purchaseVerified:) name:EVENT_MARKET_PURCHASE_VERIF object:sv];
+                    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unexpectedVerificationError:) name:EVENT_UNEXPECTED_ERROR_IN_STORE object:sv];
+
+                    [verifier verifyReceipt];
+                }
+            } else {
+                sv = [[SoomlaVerification alloc] initWithTransaction:transaction andPurchasable:pvi];
+                
+                [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(purchaseVerified:) name:EVENT_MARKET_PURCHASE_VERIF object:sv];
+                [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unexpectedVerificationError:) name:EVENT_UNEXPECTED_ERROR_IN_STORE object:sv];
+                
+                [sv verifyData];
+            }
         } else {
             [self finalizeTransaction:transaction forPurchasable:pvi];
         }

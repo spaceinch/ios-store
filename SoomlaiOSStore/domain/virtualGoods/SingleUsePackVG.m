@@ -1,18 +1,19 @@
 /*
- * Copyright (C) 2012 Soomla Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ Copyright (C) 2012-2014 Soomla Inc.
+ 
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ 
+ http://www.apache.org/licenses/LICENSE-2.0
+ 
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
  */
+
 #import "SingleUsePackVG.h"
 #import "JSONConsts.h"
 #import "StorageManager.h"
@@ -37,6 +38,11 @@ static NSString* TAG = @"SOOMLA SingleUsePackVG";
     return self;
 }
 
+/*
+ see parent
+ 
+ @param dict see parent.
+ */
 - (id)initWithDictionary:(NSDictionary *)dict {
     if (self = [super initWithDictionary:dict]) {
         self.goodItemId = [dict objectForKey:JSON_VGP_GOOD_ITEMID];
@@ -46,6 +52,11 @@ static NSString* TAG = @"SOOMLA SingleUsePackVG";
     return self;
 }
 
+/*
+ see parent
+ 
+ @return see parent.
+ */
 - (NSDictionary*)toDictionary {
     NSDictionary* parentDict = [super toDictionary];
     
@@ -56,6 +67,12 @@ static NSString* TAG = @"SOOMLA SingleUsePackVG";
     return toReturn;
 }
 
+/*
+ see parent
+ 
+ @param oAmount see parent.
+ @return see parent.
+ */
 - (int)giveAmount:(int)oAmount withEvent:(BOOL)notify {
     SingleUseVG* good = NULL;
     @try {
@@ -67,6 +84,12 @@ static NSString* TAG = @"SOOMLA SingleUsePackVG";
     return [[[StorageManager getInstance] virtualGoodStorage] addAmount:self.amount*oAmount toItem:good withEvent:notify];
 }
 
+/*
+ see parent
+ 
+ @param oAmount see parent.
+ @return see parent.
+ */
 - (int)takeAmount:(int)oAmount withEvent:(BOOL)notify {
     SingleUseVG* good = NULL;
     @try {
@@ -78,6 +101,11 @@ static NSString* TAG = @"SOOMLA SingleUsePackVG";
     return [[[StorageManager getInstance] virtualGoodStorage] removeAmount:self.amount*oAmount fromItem:good withEvent:notify];
 }
 
+/*
+ see parent
+
+ @return see parent.
+ */
 - (BOOL)canBuy {
     return YES;
 }

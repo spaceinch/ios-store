@@ -6,7 +6,7 @@ Haven't you ever wanted an in-app purchase one liner that looks like this ?!
     [StoreInventory buyItemWithItemId:@"[itemId]"]
 ```
 
-ios-store
+iOS-store
 ---
 **March 31st, 2014:** StoreController will **automatically try to fetch prices** for PurchasableItems that has a purchase type of PurchaseWithMarket. The product ids that'll be found in the App Store will update the associated 'AppStoreItem' in special fields: appStorePrice, appStoreLocale, appStoreTitle, appStoreDescription.
 
@@ -16,7 +16,7 @@ Want to learn more about modelV3? Try these:
 * [Economy Model Objects](https://github.com/soomla/ios-store/wiki/Economy-Model-Objects)  
 * [Handling Store Operations](https://github.com/soomla/ios-store/wiki/Handling-Store-Operations)
 
-The ios-store is our iOS-flavored code initiative part of The SOOMLA Project. It is an iOS SDK that simplifies the App Store's in-app purchasing API and complements it with storage, security and event handling. The project also includes a sample app for reference. 
+The iOS-store is our iOS-flavored code initiative part of The SOOMLA Project. It is an iOS SDK that simplifies the App Store's in-app purchasing API and complements it with storage, security and event handling. The project also includes a sample app for reference. 
 
 >If you also want to create a **storefront** you can do that using SOOMLA's [In-App Purchase Store Designer](http://soom.la).
 
@@ -81,12 +81,12 @@ Now you can use _StoreInventory_ to buy your new VirtualCurrencyPack:
     [StoreInventory buyItemWithItemId:TEN_COINS_PACK.itemId];
 ```
 
-And that's it! ios-store knows how to contact the App Store for you and redirect the user to their purchasing system to complete the transaction. Don't forget to subscribe to events of successful or failed purchases (see [Event Handling](https://github.com/soomla/ios-store#event-handling)).
+And that's it! iOS-store knows how to contact the App Store for you and redirect the user to their purchasing system to complete the transaction. Don't forget to subscribe to events of successful or failed purchases (see [Event Handling](https://github.com/soomla/ios-store#event-handling)).
 
 Storage & Meta-Data
 ---
 
-When you initialize _StoreController_, it automatically initializes two other classes: _StorageManager_ and _StoreInfo_. _StorageManager_ is the father of all storage related instances in your game. Use it to access tha balances of virtual currencies and virtual goods (usually, using their itemIds). _StoreInfo_ is the mother of all meta data information about your specific game. It is initialized with your implementation of `IStoreAssets` and you can use it to retrieve information about your specific game.
+When you initialize _StoreController_, it automatically initializes two other classes: _StorageManager_ and _StoreInfo_. _StorageManager_ is the father of all storage related instances in your game. Use it to access the balances of virtual currencies and virtual goods (usually, using their itemIds). _StoreInfo_ is the mother of all meta data information about your specific game. It is initialized with your implementation of `IStoreAssets` and you can use it to retrieve information about your specific game.
 
 The on-device storage is encrypted and kept in a SQLite database. SOOMLA is preparing a cloud-based storage service that will allow this SQLite to be synced to a cloud-based repository that you'll define. Stay tuned... this is just one of the goodies we prepare for you.
 
@@ -122,9 +122,9 @@ If you want to protect your application from 'bad people' (and who doesn't?!), y
 Event Handling
 ---
 
-SOOMLA lets you get notifications on various events and implement your own application specific behaviour.
+SOOMLA lets you get notifications on various events and implement your own application specific behavior.
 
-> Your behaviour is an addition to the default behaviour implemented by SOOMLA. You don't replace SOOMLA's behaviour.
+> Your behavior is an addition to the default behavior implemented by SOOMLA. You don't replace SOOMLA's behavior.
 
 In order to observe store events you need to import EventHandling.h and then you can add a notification to *NSNotificationCenter*:
 
@@ -146,7 +146,12 @@ Contribution
 
 We want you!
 
-Fork -> Clone -> Implement -> Test -> Pull-Request. We have great RESPECT for contributors.
+Fork -> Clone -> Implement —> Insert Comments -> Test -> Pull-Request. We have great RESPECT for contributors.
+
+Code Documentation
+---
+
+iOS-store follows strict code documentation conventions. If you would like to contribute please read our [Documentation Guidelines](https://github.com/soomla/ios-store/blob/master/documentation.md) and follow them. Clear, consistent  comments will make our code easy to understand.
 
 SOOMLA, Elsewhere ...
 ---
@@ -157,6 +162,6 @@ SOOMLA, Elsewhere ...
 
 License
 ---
-MIT License. Copyright (c) 2012 SOOMLA. http://project.soom.la
-+ http://www.opensource.org/licenses/MIT
+Apache License. Copyright (c) 2012-2014 SOOMLA. http://project.soom.la
++ http://opensource.org/licenses/Apache-2.0
 

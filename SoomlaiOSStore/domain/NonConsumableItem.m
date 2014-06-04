@@ -1,17 +1,17 @@
 /*
- * Copyright (C) 2012 Soomla Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ Copyright (C) 2012-2014 Soomla Inc.
+ 
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ 
+ http://www.apache.org/licenses/LICENSE-2.0
+ 
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
  */
 
 #import "NonConsumableItem.h"
@@ -44,14 +44,32 @@ static NSString* TAG = @"SOOMLA NonConsumableItem";
     return [super toDictionary];
 }
 
+/**
+ see parent
+ 
+ @param amount see parent.
+ @return see parent.
+ */
 - (int)giveAmount:(int)amount withEvent:(BOOL)notify {
     return [[[StorageManager getInstance] nonConsumableStorage] add:self];
 }
 
+/**
+ see parent
+ 
+ @param amount see parent.
+ @return see parent.
+ */
 - (int)takeAmount:(int)amount withEvent:(BOOL)notify {
     return [[[StorageManager getInstance] nonConsumableStorage] remove:self];
 }
 
+/**
+ see parent
+ 
+ @param balance see parent.
+ @return see parent.
+ */
 - (int)resetBalance:(int)balance withEvent:(BOOL)notify {
     if (balance > 0) {
         return [[[StorageManager getInstance] nonConsumableStorage] add:self];
@@ -60,6 +78,11 @@ static NSString* TAG = @"SOOMLA NonConsumableItem";
     }
 }
 
+/**
+ see parent
+ 
+ @return see parent.
+ */
 - (BOOL)canBuy {
     if ([[[StorageManager getInstance] nonConsumableStorage] nonConsumableExists:self]) {
         LogDebug(TAG, @"You can't buy a NonConsumableItem that was already given to the user.");

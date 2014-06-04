@@ -30,7 +30,7 @@
 
 
 #pragma mark -
-#pragma mark Praivate
+#pragma mark Private
 
 
 #pragma mark -

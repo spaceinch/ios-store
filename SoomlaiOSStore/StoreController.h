@@ -1,17 +1,17 @@
 /*
- * Copyright (C) 2012 Soomla Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ Copyright (C) 2012-2014 Soomla Inc.
+ 
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ 
+ http://www.apache.org/licenses/LICENSE-2.0
+ 
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
  */
 
 #import <Foundation/Foundation.h>
@@ -23,15 +23,10 @@
 @class SoomlaVerification;
 
 /**
- * This class holds the most basic assets needed to operate the Store.
- * You can use it to purchase products from the App Store.
- *
- * This is the only class you need to initialize in order to use the SOOMLA SDK.
- *
- * In addition to initializing this class, you'll also have to call
- * StoreController::storeOpening and StoreController::storeClosing when you open the store window or close it. These two
- * calls initializes important components that support billing and storage information (see implementation below).
- *
+ This class holds the most basic assets needed to operate the Store.
+ You can use it to purchase products from the App Store.
+ 
+ This is the only class you need to initialize in order to use the SOOMLA SDK.
  */
 @interface StoreController : NSObject <SKProductsRequestDelegate, SKPaymentTransactionObserver>{
     @private
@@ -43,38 +38,58 @@
 
 @property (nonatomic, retain) NSString *customReceiptVerificationClassName;
 
-
 + (StoreController*)getInstance;
 
 /**
- * This initializer also initializes StoreInfo.
- * storeAssets is the definition of your application specific assets.
- * customSecret is your encryption secret (it's used to encrypt your data in the database)
+ Initializes `StoreController` from your implementation of `IStoreAssets`.
+ This initializer also initializes `StoreInfo`.
+ 
+ @param storeAssets The definition of your application specific assets.
+ @param customSecret Your encryption secret (it's used to encrypt your data in
+    the database).
+ @return YES if successful, NO otherwise.
  */
 - (BOOL)initializeWithStoreAssets:(id<IStoreAssets>)storeAssets andCustomSecret:(NSString*)secret;
+
 /**
- * Start an in app purchase process in the App Store.
- * marketItem is the item to purchase. This item has to be defined EXACTLY the same in iTunes Connect.
+ Starts an in app purchase process in the App Store.
+ 
+ @param marketItem The item to purchase. This item has to be defined EXACTLY
+    the same in iTunes Connect.
+ @return YES if successful, NO otherwise.
  */
 - (BOOL)buyInMarketWithMarketItem:(MarketItem*)marketItem;
+
 /**
- * Initiate the restoreTransactions process and will refresh all purchasable items details from the App Store
+ Initiates the `restoreTransactions` process and the `refreshMarketItemDetails`
+ process that will refresh all purchasable items' details from the App Store.
  */
 - (void)refreshInventory;
+
 /**
- * Initiate the restoreTransactions process
+ Initiates the `restoreTransactions` process.
  */
 - (void)restoreTransactions;
+
 /**
- * Answers the question: "Were transactions already restored for this game?"
+ Checks if transactions were already restored.
+ 
+ @return YES if transactions were restored, NO otherwise.
  */
 - (BOOL)transactionsAlreadyRestored;
 
 /**
- * Refreshes the details of all market-purchasable items that were defined in App Store.
- * This function will invoke the event EVENT_ITEMS_MARKET_REFRESHED when finished
+ Refreshes the details of all market-purchasable items that were defined in 
+ App Store. This function will invoke the event `EVENT_ITEMS_MARKET_REFRESHED` 
+ when finished.
  */
 - (void)refreshMarketItemsDetails;
 
+/**
+ Checks if `StoreController` has already been initialized.
+ 
+ @return YES if initialized, NO otherwise.
+ */
 - (BOOL)isInitialized;
+
 @end

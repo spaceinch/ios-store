@@ -230,7 +230,6 @@ static NSString* TAG = @"SOOMLA StoreController";
 {
     @try {
         PurchasableVirtualItem* pvi = [[StoreInfo getInstance] purchasableItemWithProductId:transaction.payment.productIdentifier];
-<<<<<<< HEAD
         
         if (VERIFY_PURCHASES || (self.customReceiptVerificationClassName != nil)) {
             if (self.customReceiptVerificationClassName != nil) {
@@ -250,16 +249,6 @@ static NSString* TAG = @"SOOMLA StoreController";
                 
                 [sv verifyData];
             }
-=======
-
-        if (VERIFY_PURCHASES) {
-            sv = [[SoomlaVerification alloc] initWithTransaction:transaction andPurchasable:pvi];
-
-            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(purchaseVerified:) name:EVENT_MARKET_PURCHASE_VERIF object:sv];
-            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unexpectedVerificationError:) name:EVENT_UNEXPECTED_ERROR_IN_STORE object:sv];
-
-            [sv verifyData];
->>>>>>> upstream/master
         } else {
             [self finalizeTransaction:transaction forPurchasable:pvi];
         }

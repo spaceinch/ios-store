@@ -75,7 +75,9 @@ static NSString* TAG = @"SOOMLA SoomlaStore";
     } else {
         [StoreEventHandling postBillingNotSupported];
     }
-
+  
+    verifiers = [[NSMutableDictionary alloc] init];
+  
     [self refreshMarketItemsDetails];
 
     self.initialized = YES;
@@ -205,16 +207,22 @@ static NSString* developerPayload = NULL;
 }
 
 - (void)purchaseVerified:(NSNotification*)notification{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:EVENT_MARKET_PURCHASE_VERIF object:sv];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:EVENT_UNEXPECTED_ERROR_IN_STORE object:sv];
-
-    sv = nil;
 
     NSDictionary* userInfo = notification.userInfo;
     PurchasableVirtualItem* purchasable = [userInfo objectForKey:DICT_ELEMENT_PURCHASABLE];
     BOOL verified = [(NSNumber*)[userInfo objectForKey:DICT_ELEMENT_VERIFIED] boolValue];
     SKPaymentTransaction* transaction = [userInfo objectForKey:DICT_ELEMENT_TRANSACTION];
 
+    SoomlaVerification *verifier = (SoomlaVerification *)[verifiers objectForKey:transaction.transactionIdentifier];
+  
+    if (verifier)
+    {
+      [[NSNotificationCenter defaultCenter] removeObserver:self name:EVENT_MARKET_PURCHASE_VERIF object:verifier];
+      [[NSNotificationCenter defaultCenter] removeObserver:self name:EVENT_UNEXPECTED_ERROR_IN_STORE object:verifier];
+  
+      [verifiers removeObjectForKey:transaction.transactionIdentifier];
+    }
+  
     if (verified) {
         [self finalizeTransaction:transaction forPurchasable:purchasable];
     } else {
@@ -225,10 +233,12 @@ static NSString* developerPayload = NULL;
 }
 
 - (void)unexpectedVerificationError:(NSNotification*)notification{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:EVENT_MARKET_PURCHASE_VERIF object:sv];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:EVENT_UNEXPECTED_ERROR_IN_STORE object:sv];
-
-    sv = nil;
+  
+    // if there was an error, stop listening
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:EVENT_MARKET_PURCHASE_VERIF object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:EVENT_UNEXPECTED_ERROR_IN_STORE object:nil];
+  
+    [verifiers removeAllObjects];
 }
 
 - (void)givePurchasedItem:(SKPaymentTransaction *)transaction
@@ -237,24 +247,28 @@ static NSString* developerPayload = NULL;
         PurchasableVirtualItem* pvi = [[StoreInfo getInstance] purchasableItemWithProductId:transaction.payment.productIdentifier];
 
         if (VERIFY_PURCHASES) {
+            SoomlaVerification *verifier = nil;
+          
             if (self.customVerificationClass) {
                 id vObject = [self.customVerificationClass alloc];
                 if (vObject &&
                     [vObject respondsToSelector:@selector(initWithTransaction:andPurchasable:)] &&
                     [vObject respondsToSelector:@selector(verifyData)]) {
-                    sv = [vObject initWithTransaction:transaction andPurchasable:pvi];
+                    verifier = [vObject initWithTransaction:transaction andPurchasable:pvi];
                 } else {
                     LogError(TAG, @"Custom verification object is misconfigured!");
                 }
             } else {
-                sv = [[SoomlaVerification alloc] initWithTransaction:transaction andPurchasable:pvi];
+                verifier = [[SoomlaVerification alloc] initWithTransaction:transaction andPurchasable:pvi];
             }
             
-            if (sv) {
-                [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(purchaseVerified:) name:EVENT_MARKET_PURCHASE_VERIF object:sv];
-                [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unexpectedVerificationError:) name:EVENT_UNEXPECTED_ERROR_IN_STORE object:sv];
+            if (verifier) {
+                [verifiers setObject:verifier forKey:transaction.transactionIdentifier];
+              
+                [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(purchaseVerified:) name:EVENT_MARKET_PURCHASE_VERIF object:verifier];
+                [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unexpectedVerificationError:) name:EVENT_UNEXPECTED_ERROR_IN_STORE object:verifier];
                 
-                [sv verifyData];
+                [verifier verifyData];
             } else {
                 LogError(TAG, @"Could not create a valid verification object! Validating purchase.");
                 [self finalizeTransaction:transaction forPurchasable:pvi];

@@ -361,8 +361,8 @@ static NSString* developerPayload = NULL;
     NSMutableArray* marketItems = [NSMutableArray array];
     NSArray *products = response.products;
     for(SKProduct* product in products) {
-        NSString* title = product.localizedTitle;
-        NSString* description = product.localizedDescription;
+        NSString* title = (product.localizedTitle == nil) ? @"" : product.localizedTitle;
+        NSString* description = (product.localizedDescription == nil) ? @"" : product.localizedDescription;
         NSDecimalNumber* price = product.price;
         NSLocale* locale = product.priceLocale;
         NSString* productId = product.productIdentifier;
